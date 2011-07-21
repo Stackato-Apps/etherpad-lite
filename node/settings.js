@@ -24,15 +24,30 @@ var fs = require("fs");
 /**
  * The Port ep-lite should listen to
  */
-exports.port = 9001;
+exports.port = process.env.VCAP_APP_PORT || 9002;
 /*
  * The Type of the database
  */
-exports.dbType = "sqlite";
+exports.dbType = "mysql";
 /**
  * This setting is passed with dbType to ueberDB to set up the database
  */
-exports.dbSettings = { "filename" : "../var/sqlite.db" };
+exports.dbSettings = {
+                    "user"    : "root", 
+                    "host"    : "localhost", 
+                    "password": "", 
+                    "database": "store"
+                    };
+                    
+if (process.env.VCAP_SERVICES){
+    srv = JSON.parse(process.env.VCAP_SERVICES);
+    cred = srv['mysql-5.1'][0].credentials;
+    exports.dbSettings['user'] = cred.user;
+    exports.dbSettings['host'] = cred.hostname;
+    // TODO: define port
+    exports.dbSettings['password'] = cred.password;
+    exports.dbSettings['database'] = cred.name;
+}
 /**
  * A flag that shows if http requests should be loged to stdout
  */
@@ -51,43 +66,4 @@ exports.minify = true;
  */
 exports.abiword = null;
 
-//read the settings sync
-var settingsStr = fs.readFileSync("../settings.json").toString();
 
-//remove all comments
-settingsStr = settingsStr.replace(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/gm,"").replace(/#.*/g,"").replace(/\/\/.*/g,"");
-
-//try to parse the settings
-var settings;
-try
-{
-  settings = JSON.parse(settingsStr);
-}
-catch(e)
-{
-  console.error("There is a syntax error in your settings.json file");
-  console.error(e.message);
-  process.exit(1);
-}
-
-//loop trough the settings
-for(var i in settings)
-{
-  //test if the setting start with a low character
-  if(i.charAt(0).search("[a-z]") !== 0)
-  {
-    console.error("WARNING: Settings should start with a low character: '" + i + "'");
-  }
-
-  //we know this setting, so we overwrite it
-  if(exports[i] !== undefined)
-  {
-    exports[i] = settings[i];
-  }
-  //this setting is unkown, output a warning and throw it away
-  else
-  {
-    console.error("WARNING: Unkown Setting: '" + i + "'");
-    console.error("If this isn't a mistake, add the default settings for this value to node/settings.js");
-  }
-}
