@@ -13,14 +13,12 @@ Run the application locally:
 
 ## Deploying to Stackato
 
-Remove local dependencies to avoid the C-based BSON module being loaded on the
-server with different CPU architecture,
+Remove local dependencies to avoid the C-based modules (if any) being loaded on
+the server with different CPU architecture,
 
-    rm -f node_modules/
+    rm -rf ./node_modules/
 
 Now deploy to Stackato:
 
-    stackato push hummingbird
+    stackato push etherpad
     # Add a MySQL service as well
-
-TODO: many resources return 404; need to fix it.
