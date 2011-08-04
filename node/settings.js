@@ -59,7 +59,7 @@ exports.defaultPadText = "Welcome to Etherpad Lite!\n\nThis pad text is synchron
 /**
  * A flag that shows if minification is enabled or not
  */
-exports.minify = true;
+exports.minify = false;
 
 /**
  * The path of the abiword executable
