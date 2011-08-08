@@ -1,0 +1,16 @@
+name: etherpad
+
+framework:
+  type: Node
+
+mem: 64M
+instances: 1
+
+services:
+    mysql: mysql-etherpad
+
+ignores: [
+    node_modules,
+    .git
+]
+

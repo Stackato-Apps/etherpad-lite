@@ -13,12 +13,7 @@ Run the application locally:
 
 ## Deploying to Stackato
 
-Remove local dependencies to avoid the C-based modules (if any) being loaded on
-the server with different CPU architecture,
+    stackato push
 
-    rm -rf ./node_modules/
-
-Now deploy to Stackato:
-
-    stackato push etherpad
-    # Add a MySQL service as well
+As per stackato.yml, ./node_modules (added during 'local setup') will be
+ignored; and a mysql service will be added.
