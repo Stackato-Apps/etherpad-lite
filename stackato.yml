@@ -1,13 +1,13 @@
 name: etherpad
 
 framework:
-  type: Node
+  type: node
 
 mem: 64M
 instances: 1
 
 services:
-    mysql: mysql-etherpad
+    mysql-etherpad: mysql
 
 ignores: [
     node_modules,
