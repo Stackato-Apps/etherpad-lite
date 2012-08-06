@@ -41,7 +41,8 @@ exports.dbSettings = {
                     
 if (process.env.VCAP_SERVICES){
     srv = JSON.parse(process.env.VCAP_SERVICES);
-    cred = srv['mysql-5.5'][0].credentials;
+    //cred = srv['mysql'][0].credentials;
+    cred = (srv['mysql-5.5'] || srv['mysql'])[0].credentials;
     exports.dbSettings['user'] = cred.user;
     exports.dbSettings['host'] = cred.hostname;
     // TODO: define port
