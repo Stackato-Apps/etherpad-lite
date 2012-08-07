@@ -1,16 +1,13 @@
 name: etherpad
-
 framework:
   type: node
-
 mem: 64M
 instances: 1
-
+min_version:
+  client: 1.4.3
 services:
-    mysql-etherpad: mysql
-
+  ${name}-db: mysql
 ignores: [
     node_modules,
     .git
 ]
-
