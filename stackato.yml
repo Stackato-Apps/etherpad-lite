@@ -1,0 +1,18 @@
+name: etherpad
+framework:
+  type: node
+mem: 64M
+instances: 1
+min_version:
+  client: 1.4.3
+services:
+  ${name}-db: mysql
+ignores: [
+    node_modules,
+    .git
+]
+hooks:
+  post-staging:
+    - sh bin/installDeps.sh
+processes:
+  web: node node_modules/ep_etherpad-lite/node/server.js -b -p $VCAP_APP_PORT
