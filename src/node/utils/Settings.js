@@ -36,15 +36,32 @@ exports.ip = "0.0.0.0";
 /**
  * The Port ep-lite should listen to
  */
-exports.port = 9001;
+exports.port = process.env.VCAP_APP_PORT || 9002;
+
 /*
  * The Type of the database
  */
-exports.dbType = "dirty";
+exports.dbType = "mysql";
 /**
  * This setting is passed with dbType to ueberDB to set up the database
  */
-exports.dbSettings = { "filename" : path.join(exports.root, "dirty.db") };
+exports.dbSettings = {
+                    "user" : "root",
+                    "host" : "localhost",
+                    "password": "",
+                    "database": "store"
+                    };
+
+if (process.env.VCAP_SERVICES){
+    srv = JSON.parse(process.env.VCAP_SERVICES);
+    cred = srv['mysql'][0].credentials;
+    exports.dbSettings['user'] = cred.user;
+    exports.dbSettings['host'] = cred.hostname;
+    // TODO: define port
+    exports.dbSettings['password'] = cred.password;
+    exports.dbSettings['database'] = cred.name;
+}
+
 /**
  * The default Text of a new pad
  */
@@ -100,59 +117,3 @@ exports.abiwordAvailable = function()
   }
 }
 
-// Discover where the settings file lives
-var settingsFilename = argv.settings || "settings.json";
-if (settingsFilename.charAt(0) != '/') {
-    settingsFilename = path.normalize(path.join(root, settingsFilename));
-}
-
-var settingsStr
-try{
-  //read the settings sync
-  settingsStr = fs.readFileSync(settingsFilename).toString();
-} catch(e){
-  console.warn('No settings file found. Using defaults.');
-  settingsStr = '{}';
-}
-  
-//remove all comments
-settingsStr = settingsStr.replace(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/gm,"").replace(/#.*/g,"").replace(/\/\/.*/g,"");
-
-//try to parse the settings
-var settings;
-try
-{
-  settings = JSON.parse(settingsStr);
-}
-catch(e)
-{
-  console.error("There is a syntax error in your settings.json file");
-  console.error(e.message);
-  process.exit(1);
-}
-
-//loop trough the settings
-for(var i in settings)
-{
-  //test if the setting start with a low character
-  if(i.charAt(0).search("[a-z]") !== 0)
-  {
-    console.warn("Settings should start with a low character: '" + i + "'");
-  }
-
-  //we know this setting, so we overwrite it
-  if(exports[i] !== undefined)
-  {
-    exports[i] = settings[i];
-  }
-  //this setting is unkown, output a warning and throw it away
-  else
-  {
-    console.warn("Unkown Setting: '" + i + "'");
-    console.warn("This setting doesn't exist or it was removed");
-  }
-}
-
-if(exports.dbType === "dirty"){
-  console.warn("DirtyDB is used. This is fine for testing but not recommended for production.")
-}
