@@ -1,0 +1,14 @@
+applications:
+- name: etherpad-lite
+  services:
+    ${name}-db:
+      type: mysql
+  stackato:
+    hooks:
+      pre-running:
+      - mv node_modules src/node_modules
+      - mkdir -p node_modules
+      - ln -s ~/src ~/node_modules/ep_etherpad-lite
+    ignores:
+    - node_modules
+    - .git
