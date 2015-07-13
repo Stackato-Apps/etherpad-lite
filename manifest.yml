@@ -11,4 +11,3 @@ applications:
       - ln -s ~/src ~/node_modules/ep_etherpad-lite
     ignores:
     - node_modules
-    - .git
