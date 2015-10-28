@@ -24,11 +24,11 @@ Also, check out the **[FAQ](https://github.com/ether/etherpad-lite/wiki/FAQ)**, 
 
 Etherpad works with node v0.10+ and io.js.
 
-## Deploying to Stackato
+## Deploying to HPE Helion Stackato
 
     stackato push
 
-As per stackato.yml, ./node_modules (added during 'local setup') will be
+As per manifest.yml, ./node_modules (added during 'local setup') will be
 ignored; and a mysql service will be added.
 
 ## Windows
