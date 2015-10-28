@@ -1,5 +1,6 @@
 applications:
 - name: etherpad-lite
+  memory: 128M
   services:
     ${name}-db:
       type: mysql
