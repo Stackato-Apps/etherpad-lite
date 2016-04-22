@@ -76,7 +76,11 @@ if (process.env.VCAP_SERVICES) {
    * The Type of the database
    */
   exports.dbType = "mysql";
-  creds = JSON.parse(process.env.VCAP_SERVICES)["mysql"][0].credentials;
+//  creds = JSON.parse(process.env.VCAP_SERVICES)["mysql"][0].credentials;
+  vcapServices = JSON.parse(process.env.VCAP_SERVICES);
+  serviceName = Object.keys(vcapServices)[0];
+  //creds = vcapServices[serviceName][0]['credentials'];
+  creds = vcapServices[serviceName][0].credentials;
   /**
    * This setting is passed with dbType to ueberDB to set up the database
    */
