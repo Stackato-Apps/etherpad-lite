@@ -78,7 +78,12 @@ if (process.env.VCAP_SERVICES) {
   exports.dbType = "mysql";
 //  creds = JSON.parse(process.env.VCAP_SERVICES)["mysql"][0].credentials;
   vcapServices = JSON.parse(process.env.VCAP_SERVICES);
-  serviceName = Object.keys(vcapServices)[0];
+  serviceName = "";
+  for (i = 0; i < Object.keys(vcapServices).length; i++) {
+    if (Object.keys(vcapServices)[i].includes("sql")) {
+      serviceName = Object.keys(vcapServices)[i];
+    }
+  }
   //creds = vcapServices[serviceName][0]['credentials'];
   creds = vcapServices[serviceName][0].credentials;
   /**
@@ -89,7 +94,7 @@ if (process.env.VCAP_SERVICES) {
                       "host" : creds.host,
                       "port" : creds.port,
                       "password" : creds.password,
-                      "database" : creds.name
+                      "database" : creds.database
                       };
 }
 else {

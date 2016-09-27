@@ -1,14 +1,11 @@
 applications:
 - name: etherpad-lite
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack
+  command: mv node_modules src/node_modules && mkdir -p node_modules && ln -s ~/src ~/node_modules/ep_etherpad-lite && node node_modules/ep_etherpad-lite/node/server.js
   memory: 128M
   services:
+    # mysql
+    - etherpad-lite-db
     ${name}-db:
       type: mysql
-  stackato:
-    hooks:
-      pre-running:
-      - mv node_modules src/node_modules
-      - mkdir -p node_modules
-      - ln -s ~/src ~/node_modules/ep_etherpad-lite
-    ignores:
-    - node_modules
+  stack: cflinuxfs2
