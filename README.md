@@ -26,10 +26,11 @@ Etherpad works with node v0.10+ (except 6.0 and 6.1).
 
 ## Deploying to HPE Helion Stackato
 
-    stackato push
+    cf push --no-start
+    cf create-service <mysql-service-name> default etherpad-lite-db
+    cf bind-service etherpad-lite etherpad-lite-db
+    cf restart etherpad-lite
 
-As per manifest.yml, ./node_modules (added during 'local setup') will be
-ignored; and a mysql service will be added.
 
 ## Windows
 
